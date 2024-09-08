@@ -9,6 +9,7 @@ use DateInterval;
 use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\String\ByteString;
 
 class PasteService
 {
@@ -26,7 +27,9 @@ class PasteService
             default => null
         };
         $paste = new Paste();
-        $paste->setName($dto->name)
+        $paste
+            ->setId(ByteString::fromRandom(10)->toString())
+            ->setName($dto->name)
             ->setText($dto->text)
             ->setCreatedBy($this->security->getUser())
             ->setExpirationTime($expiresAt)

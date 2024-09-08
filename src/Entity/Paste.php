@@ -29,7 +29,7 @@ class Paste
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
@@ -91,6 +91,12 @@ class Paste
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function setId(string $id): static
+    {
+        $this->id = $id;
         return $this;
     }
 }
