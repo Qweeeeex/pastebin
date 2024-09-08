@@ -1,0 +1,28 @@
+
+parameters:
+
+services:
+    _defaults:
+        autowire: true      # Automatically injects dependencies in your services.
+        autoconfigure: true # Automatically registers your services as commands, event subscribers, etc.
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Listeners\KernelExceptionListener:
+        tags:
+            - {name: kernel.event_listener, event: kernel.exception}
+
+    App\Resolvers\GetRequestResolver:
+        tags:
+            - controller.targeted_value_resolver:
+                  priority: 90
+
+    App\Resolvers\PostRequestResolver:
+        tags:
+            - controller.targeted_value_resolver:
+                  priority: 90

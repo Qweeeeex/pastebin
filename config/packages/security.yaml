@@ -1,0 +1,22 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
+    providers:
+        custom_user_provider:
+            id: App\Security\UserProvider
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        main:
+            lazy: true
+            stateless: true
+            provider: custom_user_provider
+            access_token:
+                token_handler: App\Security\TokenHandler
+
+    role_hierarchy:
+        ROLE_ADMIN: ROLE_USER
+        ROLE_SYSTEM_SUPER_ADMIN: [ROLE_ADMIN, ROLE_USER]
+    access_control:
+        - { path: ^/, roles: PUBLIC_ACCESS }
