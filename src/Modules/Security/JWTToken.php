@@ -15,7 +15,7 @@ class JWTToken
      *
      * @var int
      */
-    private const int ACCESS_TOKEN_EXPIRED_PERIOD = 10800;
+    private const int ACCESS_TOKEN_EXPIRED_PERIOD = 10800000;
 
     public const string TYPE_ACCESS = 'access';
 
