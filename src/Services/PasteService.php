@@ -7,10 +7,6 @@ use App\Entity\Paste;
 use App\Repository\Exceptions\PasteNotFoundException;
 use App\Repository\PasteRepository;
 use App\Services\Exceptions\Paste\UserUnauthorizedException;
-use DateInterval;
-use DateTimeImmutable;
-use Doctrine\Common\Collections\ArrayCollection;
-use Exception;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\String\ByteString;
 
@@ -31,11 +27,13 @@ class PasteService
         if ('private' === $dto->availability && null === $user) {
             throw new UserUnauthorizedException();
         }
+
         $expiresAt = match ($dto->expirationTime) {
-            '10M', '1H', '3H' => (new DateTimeImmutable())->add(new DateInterval("PT{$dto->expirationTime}")),
-            '1D', '1W', '1M' => (new DateTimeImmutable())->add(new DateInterval("P{$dto->expirationTime}")),
-            default => null
+            '10M', '1H', '3H' => (new \DateTimeImmutable())->add(new \DateInterval("PT{$dto->expirationTime}")),
+            '1D', '1W', '1M' => (new \DateTimeImmutable())->add(new \DateInterval("P{$dto->expirationTime}")),
+            default => null,
         };
+
         $paste = new Paste();
         $paste
             ->setId(ByteString::fromRandom(10)->toString())
@@ -59,7 +57,7 @@ class PasteService
     public function getList(): array
     {
         return array_map(
-            fn($paste) => [
+            fn ($paste) => [
                 'id' => $paste->getId(),
                 'name' => $paste->getName(),
                 'text' => $paste->getText(),
@@ -68,7 +66,6 @@ class PasteService
             ],
             $this->pasteRepository->getPublicPasteList()
         );
-
     }
 
     /**
@@ -77,6 +74,7 @@ class PasteService
     public function getPaste(string $id): array
     {
         $paste = $this->pasteRepository->getPasteById($id, $this->security->getUser());
+
         return [
             'id' => $paste->getId(),
             'name' => $paste->getName(),

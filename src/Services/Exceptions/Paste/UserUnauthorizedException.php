@@ -2,9 +2,7 @@
 
 namespace App\Services\Exceptions\Paste;
 
-use Exception;
-
-class UserUnauthorizedException extends Exception
+class UserUnauthorizedException extends \Exception
 {
     public function __construct()
     {

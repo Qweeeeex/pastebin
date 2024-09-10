@@ -3,11 +3,11 @@
 namespace App\Security;
 
 use App\Entity\AccessToken;
+use App\Modules\Security\Exceptions\UnknownTokenType;
+use App\Modules\Security\JWTToken;
+use App\Repository\AccessTokenRepository;
 use App\Security\Exceptions\ExpiredTokenException;
 use App\Security\Exceptions\NotValidTokenException;
-use App\Modules\Security\Exceptions\UnknownTokenType;
-use App\Repository\AccessTokenRepository;
-use App\Modules\Security\JWTToken;
 
 class TokenService extends JWTToken
 {
@@ -76,11 +76,11 @@ class TokenService extends JWTToken
         return true;
     }
 
-    private function getTokenFromReposiotry(string $token, string $type): AccessToken|null
+    private function getTokenFromReposiotry(string $token, string $type): ?AccessToken
     {
         return match ($type) {
             JWTToken::TYPE_ACCESS => $this->accessTokenRepository->getOneByValue($token),
-            default => throw new UnknownTokenType()
+            default => throw new UnknownTokenType(),
         };
     }
 

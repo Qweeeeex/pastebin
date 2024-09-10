@@ -2,18 +2,17 @@
 
 namespace App\Resolvers;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class DeleteRequestResolver extends BaseRequestResolver
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function checkRequestMethod(Request $request): void
     {
         if (Request::METHOD_DELETE !== $request->getMethod()) {
-            throw new Exception('Неподдерживаемый тип запроса, допустим только DELETE');
+            throw new \Exception('Неподдерживаемый тип запроса, допустим только DELETE');
         }
     }
 

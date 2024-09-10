@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\DTO\Request\IdRequestDTO;
 use App\DTO\Request\Paste\PostPasteDTO;
-use App\Entity\Paste;
 use App\Mappers\GetRequestMapper;
 use App\Mappers\PostRequestMapper;
 use App\Repository\Exceptions\PasteNotFoundException;
@@ -36,7 +35,7 @@ class PasteController extends AbstractController
         methods: [Request::METHOD_POST]
     )]
     public function createPaste(
-        #[PostRequestMapper] PostPasteDTO $dto
+        #[PostRequestMapper] PostPasteDTO $dto,
     ): JsonResponse {
         return $this->json($this->pasteService->create($dto));
     }
@@ -60,9 +59,8 @@ class PasteController extends AbstractController
         methods: [Request::METHOD_GET]
     )]
     public function getPaste(
-        #[GetRequestMapper] IdRequestDTO $dto
-    ): JsonResponse
-    {
+        #[GetRequestMapper] IdRequestDTO $dto,
+    ): JsonResponse {
         return $this->json($this->pasteService->getPaste($dto->id));
     }
 }

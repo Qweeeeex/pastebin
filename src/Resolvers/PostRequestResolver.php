@@ -2,18 +2,17 @@
 
 namespace App\Resolvers;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Request;
 
 class PostRequestResolver extends BaseRequestResolver
 {
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function checkRequestMethod(Request $request): void
     {
         if (!in_array($request->getMethod(), [Request::METHOD_POST, Request::METHOD_PUT, Request::METHOD_PATCH])) {
-            throw new Exception('Неподдерживаемый тип запроса, допустимы POST, PUT, PATCH');
+            throw new \Exception('Неподдерживаемый тип запроса, допустимы POST, PUT, PATCH');
         }
     }
 

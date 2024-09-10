@@ -18,7 +18,7 @@ class UserRepository extends AbstractRepository
 
     public function isExistsByLogin(string $login): bool
     {
-        return (bool)$this->findOneBy(['login' => $login]);
+        return (bool) $this->findOneBy(['login' => $login]);
     }
 
     public function getOneByLogin(string $identifier): User

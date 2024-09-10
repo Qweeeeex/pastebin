@@ -3,14 +3,12 @@
 namespace App\Listeners;
 
 use App\Resolvers\Exceptions\ConstraintViolationException;
-use Exception;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\HttpKernel\KernelEvents;
-use Throwable;
 
 class KernelExceptionListener implements EventSubscriberInterface
 {
@@ -30,7 +28,7 @@ class KernelExceptionListener implements EventSubscriberInterface
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     public function onKernelException(ExceptionEvent $exceptionEvent)
     {
@@ -38,13 +36,13 @@ class KernelExceptionListener implements EventSubscriberInterface
 
         $response = match ($throwable::class) {
             ConstraintViolationException::class => $this->getResponseValidationError($throwable),
-            default => $this->getResponseDefault($throwable)
+            default => $this->getResponseDefault($throwable),
         };
 
         $exceptionEvent->setResponse($response);
     }
 
-    private function getResponseDefault(Throwable $throwable): JsonResponse
+    private function getResponseDefault(\Throwable $throwable): JsonResponse
     {
         $code = array_key_exists($throwable->getCode(), Response::$statusTexts)
             ? $throwable->getCode()
@@ -67,10 +65,10 @@ class KernelExceptionListener implements EventSubscriberInterface
         return new JsonResponse($response, $statusCode);
     }
 
-    private function getResponseValidationError(Throwable $throwable): JsonResponse
+    private function getResponseValidationError(\Throwable $throwable): JsonResponse
     {
         if (!$throwable instanceof ConstraintViolationException) {
-            throw new Exception('Неправильная функция преобразования ошибки');
+            throw new \Exception('Неправильная функция преобразования ошибки');
         }
 
         $errors = $throwable->getConstraintViolationList();

@@ -2,10 +2,9 @@
 
 namespace App\Repository\Exceptions;
 
-use Exception;
 use Symfony\Component\HttpFoundation\Response;
 
-class PasteNotFoundException extends Exception
+class PasteNotFoundException extends \Exception
 {
     public function __construct()
     {

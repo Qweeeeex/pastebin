@@ -8,7 +8,6 @@ use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
-use Throwable;
 
 class UserProvider implements UserProviderInterface
 {
@@ -21,7 +20,7 @@ class UserProvider implements UserProviderInterface
     {
         try {
             return $this->userRepository->getOneByLogin($identifier);
-        } catch (Throwable $e) {
+        } catch (\Throwable $e) {
             throw new UserNotFoundException($e->getMessage());
         }
     }

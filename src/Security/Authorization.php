@@ -3,11 +3,10 @@
 namespace App\Security;
 
 use App\Entity\User;
+use App\Modules\Security\JWTToken;
 use App\Repository\UserRepository;
 use App\Security\Exceptions\LoginIncorrectException;
 use App\Security\Exceptions\PasswordIncorrectException;
-use App\Modules\Security\JWTToken;
-use SensitiveParameter;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class Authorization
@@ -25,7 +24,7 @@ class Authorization
      */
     public function login(
         string $login,
-        #[SensitiveParameter] string $password
+        #[\SensitiveParameter] string $password,
     ): array {
         if (!$this->userRepository->isExistsByLogin($login)) {
             throw new LoginIncorrectException();

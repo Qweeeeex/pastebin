@@ -23,7 +23,7 @@ class AuthController extends AbstractController
 
     #[Route(path: '/auth/login', name: 'app_auth', methods: ['POST'])]
     public function index(
-        #[PostRequestMapper] LoginRequestDTO $dto
+        #[PostRequestMapper] LoginRequestDTO $dto,
     ): JsonResponse {
         return $this->json($this->authorization->login($dto->login, $dto->password));
     }

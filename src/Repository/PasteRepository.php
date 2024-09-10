@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Paste;
 use App\Entity\User;
 use App\Repository\Exceptions\PasteNotFoundException;
-use DateTimeImmutable;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -27,11 +26,10 @@ class PasteRepository extends AbstractRepository
         return $this->createQueryBuilder('p')
             ->where('p.availability = :public')
             ->andWhere('p.expirationTime >= :now')
-            ->setParameter('now', new DateTimeImmutable())
+            ->setParameter('now', new \DateTimeImmutable())
             ->setParameter('public', 'public')
             ->getQuery()
             ->getResult();
-
     }
 
     /**
@@ -39,7 +37,6 @@ class PasteRepository extends AbstractRepository
      */
     public function getPasteById(string $id, ?User $user): ?Paste
     {
-
         $result = $this->createQueryBuilder('p')
             ->where('p.id = :id')
             ->andWhere('p.expirationTime >= :now')
@@ -48,7 +45,7 @@ class PasteRepository extends AbstractRepository
                 OR (p.availability = :public)
                 OR (p.availability = :unlisted)
             ')
-            ->setParameter('now', new DateTimeImmutable())
+            ->setParameter('now', new \DateTimeImmutable())
             ->setParameter('id', $id)
             ->setParameter('private', 'private')
             ->setParameter('user', $user)

@@ -21,16 +21,15 @@ class UserController extends AbstractController
     ): void {
         $this->userService = $userService;
     }
+
     #[Route(
         path: '/users/register',
         name: 'createUser',
         methods: ['POST']
     )]
     public function createUser(
-        #[PostRequestMapper] PostUserDTO $dto
+        #[PostRequestMapper] PostUserDTO $dto,
     ): JsonResponse {
-        $user = $this->userService->createUser($dto);
-
-        return $this->json($user, Response::HTTP_CREATED);
+        return $this->json($this->userService->createUser($dto), Response::HTTP_CREATED);
     }
 }

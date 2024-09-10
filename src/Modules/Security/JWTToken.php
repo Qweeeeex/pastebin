@@ -4,7 +4,6 @@ namespace App\Modules\Security;
 
 use App\Modules\Security\Exceptions\EncodingTokenError;
 use App\Modules\Security\Exceptions\UnknownTokenType;
-use UnhandledMatchError;
 
 class JWTToken
 {
@@ -32,7 +31,7 @@ class JWTToken
             $expire = match ($tokenType) {
                 self::TYPE_ACCESS => self::ACCESS_TOKEN_EXPIRED_PERIOD,
             };
-        } catch (UnhandledMatchError) {
+        } catch (\UnhandledMatchError) {
             throw new UnknownTokenType();
         }
 

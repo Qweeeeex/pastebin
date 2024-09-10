@@ -2,10 +2,9 @@
 
 namespace App\Resolvers\Exceptions;
 
-use Exception;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 
-class ConstraintViolationException extends Exception
+class ConstraintViolationException extends \Exception
 {
     private ConstraintViolationListInterface $constraintViolationList;
 

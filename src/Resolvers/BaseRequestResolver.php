@@ -5,9 +5,6 @@ namespace App\Resolvers;
 use App\DTO\Request\RequestDTOInterface;
 use App\Resolvers\Exceptions\ConstraintViolationException;
 use App\Resolvers\NameConverters\SnakeCaseToCamelCaseConverter;
-use Exception;
-use ReflectionClass;
-use ReflectionException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;
@@ -34,7 +31,7 @@ abstract class BaseRequestResolver implements ValueResolverInterface
     private Serializer $serializer;
 
     public function __construct(
-        private readonly ValidatorInterface $validator
+        private readonly ValidatorInterface $validator,
     ) {
         $reflectionExtractor = new ReflectionExtractor();
         $phpDocExtractor = new PhpDocExtractor();
@@ -58,9 +55,9 @@ abstract class BaseRequestResolver implements ValueResolverInterface
     }
 
     /**
-     * @throws ReflectionException
+     * @throws \ReflectionException
      * @throws ConstraintViolationException
-     * @throws Exception
+     * @throws \Exception
      */
     public function resolve(Request $request, ArgumentMetadata $argument): iterable
     {
@@ -78,14 +75,14 @@ abstract class BaseRequestResolver implements ValueResolverInterface
             );
         } catch (PartialDenormalizationException $e) {
             $constraintViolationList = new ConstraintViolationList();
-            $reflectionClass = new ReflectionClass($argument->getType());
+            $reflectionClass = new \ReflectionClass($argument->getType());
             foreach ($reflectionClass->getProperties() as $reflectionProperty) {
                 if (!$reflectionProperty->isInitialized($e->getData())) {
                     $propertyType = $reflectionProperty->getType();
                     if (str_contains($propertyType, '?')) {
-                        $message = 'Неверный тип параметра. Ожидался ' . ltrim($reflectionProperty->getType(), '?') . ' или null';
+                        $message = 'Неверный тип параметра. Ожидался '.ltrim($reflectionProperty->getType(), '?').' или null';
                     } else {
-                        $message = 'Неверный тип параметра. Ожидался ' . $reflectionProperty->getType();
+                        $message = 'Неверный тип параметра. Ожидался '.$reflectionProperty->getType();
                     }
 
                     $constraintViolationList->add(new ConstraintViolation($message, '', [], null, $reflectionProperty->getName(), null));
@@ -103,12 +100,12 @@ abstract class BaseRequestResolver implements ValueResolverInterface
     }
 
     /**
-     * @throws Exception
+     * @throws \Exception
      */
     private function checkClass(string $dtoClass): void
     {
         if (!is_a($dtoClass, RequestDTOInterface::class, true)) {
-            throw new Exception('Неподдерживаемый DTO, DTO должно реализовывать интерфейс RequestDTOInterface!');
+            throw new \Exception('Неподдерживаемый DTO, DTO должно реализовывать интерфейс RequestDTOInterface!');
         }
     }
 
