@@ -5,12 +5,8 @@ namespace App\Repository;
 use App\Entity\Paste;
 use App\Entity\User;
 use App\Repository\Exceptions\PasteNotFoundException;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<Paste>
- */
 class PasteRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)

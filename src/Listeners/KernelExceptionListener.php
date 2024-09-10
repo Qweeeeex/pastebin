@@ -30,7 +30,7 @@ class KernelExceptionListener implements EventSubscriberInterface
     /**
      * @throws \Exception
      */
-    public function onKernelException(ExceptionEvent $exceptionEvent)
+    public function onKernelException(ExceptionEvent $exceptionEvent): void
     {
         $throwable = $exceptionEvent->getThrowable();
 

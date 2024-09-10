@@ -91,8 +91,14 @@ class JWTToken
         return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');
     }
 
-    private function base64url_decode($data): bool|string
+    // пхпстан по какой-то причине не видит, что base64_decode может возвращать false
+    private function base64url_decode($data): false|string // @phpstan-ignore return.unusedType
     {
-        return base64_decode(str_pad(strtr($data, '-_', '+/'), strlen($data) % 4, '=', STR_PAD_RIGHT));
+        return base64_decode(
+            str_pad(
+                strtr($data, '-_', '+/'),
+                strlen($data) % 4, '=',
+            )
+        );
     }
 }

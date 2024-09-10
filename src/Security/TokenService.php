@@ -2,8 +2,6 @@
 
 namespace App\Security;
 
-use App\Entity\AccessToken;
-use App\Modules\Security\Exceptions\UnknownTokenType;
 use App\Modules\Security\JWTToken;
 use App\Repository\AccessTokenRepository;
 use App\Security\Exceptions\ExpiredTokenException;
@@ -38,12 +36,7 @@ class TokenService extends JWTToken
             throw new ExpiredTokenException();
         }
 
-        if (!$this->validEmployeeServiceId($tokenArray)) {
-            throw new NotValidTokenException();
-        }
-
-        $dbToken = $this->getTokenFromReposiotry($fullToken, $type);
-        if (!isset($dbToken)) {
+        if (!$this->validId($tokenArray)) {
             throw new NotValidTokenException();
         }
 
@@ -55,7 +48,7 @@ class TokenService extends JWTToken
         return $tokenArray['exp'] < time();
     }
 
-    private function validEmployeeServiceId(array $tokenArray): bool
+    private function validId(array $tokenArray): bool
     {
         return isset($tokenArray['id']);
     }
@@ -68,20 +61,11 @@ class TokenService extends JWTToken
             return false;
         }
 
-        // Проверяем
         if ($signature[0] !== $encodedHead || $signature[1] !== $encodedPayload) {
             return false;
         }
 
         return true;
-    }
-
-    private function getTokenFromReposiotry(string $token, string $type): ?AccessToken
-    {
-        return match ($type) {
-            JWTToken::TYPE_ACCESS => $this->accessTokenRepository->getOneByValue($token),
-            default => throw new UnknownTokenType(),
-        };
     }
 
     public function generateNewToken(array $payload, string $type): string

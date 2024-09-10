@@ -4,12 +4,8 @@ namespace App\Repository;
 
 use App\Entity\AccessToken;
 use App\Security\Exceptions\TokenNotFound;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
-/**
- * @extends ServiceEntityRepository<AccessToken>
- */
 class AccessTokenRepository extends AbstractRepository
 {
     public function __construct(ManagerRegistry $registry)

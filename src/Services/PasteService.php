@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\DTO\Request\Paste\PostPasteDTO;
 use App\Entity\Paste;
+use App\Entity\User;
 use App\Repository\Exceptions\PasteNotFoundException;
 use App\Repository\PasteRepository;
 use App\Services\Exceptions\Paste\UserUnauthorizedException;
@@ -12,10 +13,15 @@ use Symfony\Component\String\ByteString;
 
 class PasteService
 {
+    private ?User $authUser;
+
     public function __construct(
         private readonly PasteRepository $pasteRepository,
         private readonly Security $security,
     ) {
+        /** @var ?User $user */
+        $user = $this->security->getUser();
+        $this->authUser = $user;
     }
 
     /**
@@ -23,8 +29,7 @@ class PasteService
      */
     public function create(PostPasteDTO $dto): array
     {
-        $user = $this->security->getUser();
-        if ('private' === $dto->availability && null === $user) {
+        if ('private' === $dto->availability && null === $this->authUser) {
             throw new UserUnauthorizedException();
         }
 
@@ -39,7 +44,7 @@ class PasteService
             ->setId(ByteString::fromRandom(10)->toString())
             ->setName($dto->name)
             ->setText($dto->text)
-            ->setCreatedBy($user)
+            ->setCreatedBy($this->authUser)
             ->setExpirationTime($expiresAt)
             ->setAvailability($dto->availability);
         $this->pasteRepository->saveEntity($paste);
@@ -73,7 +78,7 @@ class PasteService
      */
     public function getPaste(string $id): array
     {
-        $paste = $this->pasteRepository->getPasteById($id, $this->security->getUser());
+        $paste = $this->pasteRepository->getPasteById($id, $this->authUser);
 
         return [
             'id' => $paste->getId(),
