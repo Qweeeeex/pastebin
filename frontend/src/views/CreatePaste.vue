@@ -12,7 +12,7 @@
       </div>
       <div>
         <label>Срок действия:</label>
-        <select v-model="expirationTime">
+        <select v-model="expTime">
           <option value="10M">10 минут</option>
           <option value="1H">1 час</option>
           <option value="3H">3 часа</option>
@@ -42,7 +42,7 @@ export default {
     return {
       name: '',
       text: '',
-      expirationTime: '10M',
+      expTime: '10M',
       availability: 'public',
     }
   },
@@ -52,7 +52,7 @@ export default {
         const response = await axios.post('/pastes', {
           name: this.name,
           text: this.text,
-          expirationTime: this.expirationTime,
+          expirationTime: this.expTime,
           availability: this.availability,
         })
         this.$router.push(`/pastes/${response.data.id}`)

@@ -5,16 +5,16 @@
         <router-link to="/">Главная</router-link>
         <router-link to="/create">Создать пасту</router-link>
         <router-link v-if="!isLoggedIn" to="/login">Войти</router-link>
+        <router-link v-if="!isLoggedIn" to="/register">Регистрация</router-link>
         <router-link v-if="isLoggedIn" to="/user/pastes">Мои пасты</router-link>
+        <button v-if="isLoggedIn" @click="logout">Выйти</button>
       </nav>
     </header>
 
     <section>
-      <!-- Рендеринг компонентов на основе маршрутов -->
       <router-view />
     </section>
 
-    <!-- Блок для последних публичных паст -->
     <aside>
       <RecentPastes />
     </aside>
@@ -31,8 +31,14 @@ export default {
   },
   computed: {
     ...mapState({
-      isLoggedIn: state => state.isLoggedIn, // Или аналогичное состояние авторизации в Pinia/Vuex
+      isLoggedIn: state => state.isLoggedIn,
     }),
+  },
+  methods: {
+    logout() {
+      this.$store.commit('logout');
+      this.$router.push('/');
+    },
   },
 };
 </script>

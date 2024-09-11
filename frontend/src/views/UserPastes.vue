@@ -31,7 +31,7 @@ export default {
   methods: {
     async fetchUserPastes() {
       try {
-        const response = await axios.get(`/user/pastes?page=${this.currentPage}&limit=${this.pageSize}`)
+        const response = await axios.get(`/users/pastes?page=${this.currentPage}&limit=${this.pageSize}`)
         this.pastes = response.data
       } catch (error) {
         console.error("Ошибка при загрузке паст", error)

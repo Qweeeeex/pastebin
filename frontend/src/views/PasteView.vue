@@ -3,7 +3,7 @@
     <h2>{{ paste.name }}</h2>
     <p>{{ paste.text }}</p>
     <p><strong>Доступность:</strong> {{ paste.availability }}</p>
-    <p><strong>Срок действия:</strong> {{ paste.expirationTime }}</p>
+    <p><strong>Срок действия:</strong> {{ paste.expTime }}</p>
   </div>
 </template>
 
