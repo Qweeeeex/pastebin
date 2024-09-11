@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
+use App\Repository\Exceptions\UserNotFoundException;
 use Doctrine\Persistence\ManagerRegistry;
 
 class UserRepository extends AbstractRepository
@@ -17,13 +18,19 @@ class UserRepository extends AbstractRepository
         return (bool) $this->findOneBy(['login' => $login]);
     }
 
-    public function getOneByLogin(string $identifier): ?User
+    /**
+     * @throws UserNotFoundException
+     */
+    public function getOneByLogin(string $identifier): User
     {
-        return $this->findOneBy(['login' => $identifier]);
+        return $this->findOneBy(['login' => $identifier]) ?? throw new UserNotFoundException();
     }
 
-    public function getOneById(mixed $id): ?User
+    /**
+     * @throws UserNotFoundException
+     */
+    public function getOneById(mixed $id): User
     {
-        return $this->find($id);
+        return $this->find($id) ?? throw new UserNotFoundException();
     }
 }
