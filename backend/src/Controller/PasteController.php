@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\DTO\Request\GetPasteListDTO;
 use App\DTO\Request\IdRequestDTO;
 use App\DTO\Request\Paste\PostPasteDTO;
 use App\Mappers\GetRequestMapper;
@@ -45,9 +46,11 @@ class PasteController extends AbstractController
         name: 'get_paste_list',
         methods: [Request::METHOD_GET]
     )]
-    public function getPasteList(): JsonResponse
+    public function getPasteList(
+        #[GetRequestMapper] GetPasteListDTO $dto
+    ): JsonResponse
     {
-        return $this->json($this->pasteService->getList());
+        return $this->json($this->pasteService->getPublicPasteList($dto));
     }
 
     /**

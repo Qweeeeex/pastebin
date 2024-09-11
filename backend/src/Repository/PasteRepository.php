@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\DTO\Request\GetPasteListDTO;
 use App\Entity\Paste;
 use App\Entity\User;
 use App\Repository\Exceptions\PasteNotFoundException;
@@ -17,15 +18,31 @@ class PasteRepository extends AbstractRepository
     /**
      * @return Paste[]
      */
-    public function getPublicPasteList(): array
+    public function getPublicPasteList(GetPasteListDTO $dto): array
     {
         return $this->createQueryBuilder('p')
             ->where('p.availability = :public')
             ->andWhere('p.expirationTime >= :now')
             ->setParameter('now', new \DateTimeImmutable())
             ->setParameter('public', 'public')
+            ->setFirstResult(($dto->page - 1) * $dto->limit)
+            ->setMaxResults($dto->limit)
             ->getQuery()
             ->getResult();
+    }
+
+    public function getPrivatePasteList(GetPasteListDTO $dto, User $user): array
+    {
+        return $this->createQueryBuilder('p')
+            ->where('p.availability = :private')
+            ->andWhere('p.expirationTime >= :now')
+            ->andWhere('p.createdBy = :user')
+            ->setParameter('user', $user)
+            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('private', 'private')
+            ->setFirstResult(($dto->page - 1) * $dto->limit)
+            ->setMaxResults($dto->limit)
+            ->getQuery()->getResult();
     }
 
     /**

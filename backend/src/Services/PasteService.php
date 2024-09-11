@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTO\Request\GetPasteListDTO;
 use App\DTO\Request\Paste\PostPasteDTO;
 use App\Entity\Paste;
 use App\Entity\User;
@@ -59,7 +60,7 @@ class PasteService
         ];
     }
 
-    public function getList(): array
+    public function getPublicPasteList(GetPasteListDTO $dto): array
     {
         return array_map(
             fn ($paste) => [
@@ -69,7 +70,7 @@ class PasteService
                 'createdBy' => $paste->getCreatedBy()->getLogin(),
                 'expTime' => $paste->getExpirationTime()->format('Y-m-d H:i:s'),
             ],
-            $this->pasteRepository->getPublicPasteList()
+            $this->pasteRepository->getPublicPasteList($dto)
         );
     }
 
@@ -88,5 +89,20 @@ class PasteService
             'expTime' => $paste->getExpirationTime()->format('Y-m-d H:i:s'),
             'availability' => $paste->getAvailability(),
         ];
+    }
+
+    public function getPrivatePasteList(GetPasteListDTO $dto): array
+    {
+        return array_map(
+            function ($paste) {
+                return [
+                    'id' => $paste->getId(),
+                    'name' => $paste->getName(),
+                    'text' => $paste->getText(),
+                    'expTime' => $paste->getExpirationTime()->format('Y-m-d H:i:s'),
+                ];
+            },
+            $this->pasteRepository->getPrivatePasteList($dto, $this->authUser)
+        );
     }
 }
