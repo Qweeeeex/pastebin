@@ -17,12 +17,12 @@ class UserRepository extends AbstractRepository
         return (bool) $this->findOneBy(['login' => $login]);
     }
 
-    public function getOneByLogin(string $identifier): User
+    public function getOneByLogin(string $identifier): ?User
     {
         return $this->findOneBy(['login' => $identifier]);
     }
 
-    public function getOneById(mixed $id): User
+    public function getOneById(mixed $id): ?User
     {
         return $this->find($id);
     }
