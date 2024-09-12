@@ -1,9 +1,18 @@
 <template>
-  <div v-if="paste">
-    <h2>{{ paste.name }}</h2>
-    <p>{{ paste.text }}</p>
-    <p><strong>Доступность:</strong> {{ paste.availability }}</p>
-    <p><strong>Срок действия:</strong> {{ paste.expTime }}</p>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-8">
+        <div v-if="paste" class="card">
+          <div class="card-body">
+            <h2 class="card-title">{{ paste.name }}</h2>
+            <p class="card-text">{{ paste.text }}</p>
+            <p class="text-muted">Доступность: {{ paste.availability }}</p>
+            <p class="text-muted">Доступно до: {{ paste.expTime }}</p>
+            <p v-if="paste.createdBy" class="text-muted">Создал: {{ paste.createdBy}}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

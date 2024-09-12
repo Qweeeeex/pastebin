@@ -1,19 +1,40 @@
 <template>
-  <div class="login">
-    <h2>Авторизация</h2>
-    <form @submit.prevent="login">
-      <div>
-        <label for="login">Логин:</label>
-        <input type="text" v-model="loginData.login" required />
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="text-center">Авторизация</h2>
+            <form @submit.prevent="login">
+              <div class="form-group">
+                <label for="login">Логин:</label>
+                <input
+                    type="text"
+                    id="login"
+                    class="form-control"
+                    v-model="loginData.login"
+                    required
+                />
+              </div>
+              <div class="form-group mt-3">
+                <label for="password">Пароль:</label>
+                <input
+                    type="password"
+                    id="password"
+                    class="form-control"
+                    v-model="loginData.password"
+                    required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary btn-block mt-4">
+                Войти
+              </button>
+            </form>
+            <p v-if="errorMessage" class="text-danger mt-3 text-center">{{ errorMessage }}</p>
+          </div>
+        </div>
       </div>
-      <div>
-        <label for="password">Пароль:</label>
-        <input type="password" v-model="loginData.password" required />
-      </div>
-      <button type="submit">Войти</button>
-    </form>
-
-    <p v-if="errorMessage">{{ errorMessage }}</p>
+    </div>
   </div>
 </template>
 
@@ -61,11 +82,4 @@ export default {
 </script>
 
 <style scoped>
-.login {
-  max-width: 400px;
-  margin: auto;
-}
-button {
-  margin-top: 10px;
-}
 </style>

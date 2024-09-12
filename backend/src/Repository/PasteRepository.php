@@ -16,33 +16,56 @@ class PasteRepository extends AbstractRepository
     }
 
     /**
-     * @return Paste[]
+     * @return array{items: Paste[], count: int}
      */
     public function getPublicPasteList(GetPasteListDTO $dto): array
     {
-        return $this->createQueryBuilder('p')
+        $query = $this->createQueryBuilder('p')
             ->where('p.availability = :public')
             ->andWhere('p.expirationTime >= :now')
             ->setParameter('now', new \DateTimeImmutable())
-            ->setParameter('public', 'public')
-            ->setFirstResult(($dto->page - 1) * $dto->limit)
-            ->setMaxResults($dto->limit)
-            ->getQuery()
-            ->getResult();
-    }
+            ->setParameter('public', 'public');
 
-    public function getPrivatePasteList(GetPasteListDTO $dto, User $user): array
-    {
-        return $this->createQueryBuilder('p')
-            ->where('p.availability = :private')
-            ->andWhere('p.expirationTime >= :now')
-            ->andWhere('p.createdBy = :user')
-            ->setParameter('user', $user)
-            ->setParameter('now', new \DateTimeImmutable())
-            ->setParameter('private', 'private')
+        $countQuery = clone $query;
+        $countQuery->select('COUNT(p.id)');
+        $count = $countQuery->getQuery()->getSingleScalarResult();
+
+        $result = $query
             ->setFirstResult(($dto->page - 1) * $dto->limit)
             ->setMaxResults($dto->limit)
             ->getQuery()->getResult();
+        return [
+            'items' => $result,
+            'count' => $count,
+        ];
+    }
+
+    /**
+     * @return array{items: Paste[], count: int}
+     */
+    public function getPrivatePasteList(GetPasteListDTO $dto, User $user): array
+    {
+        $query = $this->createQueryBuilder('p')
+            ->where('p.availability = :private AND p.createdBy = :user')
+            ->orWhere('p.availability = :unlisted AND p.createdBy = :user')
+            ->andWhere('p.expirationTime >= :now')
+            ->setParameter('user', $user)
+            ->setParameter('unlisted', 'unlisted')
+            ->setParameter('now', new \DateTimeImmutable())
+            ->setParameter('private', 'private');
+
+        $countQuery = clone $query;
+        $countQuery->select('COUNT(p.id)');
+        $count = $countQuery->getQuery()->getSingleScalarResult();
+
+        $result = $query
+            ->setFirstResult(($dto->page - 1) * $dto->limit)
+            ->setMaxResults($dto->limit)
+            ->getQuery()->getResult();
+        return [
+            'items' => $result,
+            'count' => $count,
+        ];
     }
 
     /**

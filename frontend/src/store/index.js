@@ -1,5 +1,4 @@
 import { createStore } from 'vuex'
-import axios from 'axios'
 
 export default createStore({
     state: {
@@ -17,15 +16,6 @@ export default createStore({
         },
     },
     actions: {
-        async login({ commit }, { login, password }) {
-            try {
-                const response = await axios.post('/auth/login', { login, password })
-                const token = response.data.accessToken
-                commit('setToken', token)
-            } catch (error) {
-                console.error('Ошибка авторизации', error)
-            }
-        },
         logout({ commit }) {
             commit('logout')
         },

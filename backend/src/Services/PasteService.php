@@ -62,7 +62,8 @@ class PasteService
 
     public function getPublicPasteList(GetPasteListDTO $dto): array
     {
-        return array_map(
+        $result = $this->pasteRepository->getPublicPasteList($dto);
+        $items = array_map(
             fn ($paste) => [
                 'id' => $paste->getId(),
                 'name' => $paste->getName(),
@@ -70,8 +71,12 @@ class PasteService
                 'createdBy' => $paste->getCreatedBy()->getLogin(),
                 'expTime' => $paste->getExpirationTime()->format('Y-m-d H:i:s'),
             ],
-            $this->pasteRepository->getPublicPasteList($dto)
+            $result['items']
         );
+        return [
+            'items' => $items,
+            'count' => $result['count'],
+        ];
     }
 
     /**
@@ -93,7 +98,8 @@ class PasteService
 
     public function getPrivatePasteList(GetPasteListDTO $dto): array
     {
-        return array_map(
+        $result = $this->pasteRepository->getPrivatePasteList($dto, $this->authUser);
+        $items = array_map(
             function ($paste) {
                 return [
                     'id' => $paste->getId(),
@@ -102,7 +108,12 @@ class PasteService
                     'expTime' => $paste->getExpirationTime()->format('Y-m-d H:i:s'),
                 ];
             },
-            $this->pasteRepository->getPrivatePasteList($dto, $this->authUser)
+            $result['items']
         );
+
+        return [
+            'items' => $items,
+            'count' => $result['count'],
+        ];
     }
 }

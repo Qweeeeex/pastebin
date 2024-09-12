@@ -14,21 +14,13 @@
     <section>
       <router-view />
     </section>
-
-    <aside>
-      <RecentPastes />
-    </aside>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import RecentPastes from './views/RecentAndLoggedPastes.vue';
+import { mapState } from 'vuex'
 
 export default {
-  components: {
-    RecentPastes,
-  },
   computed: {
     ...mapState({
       isLoggedIn: state => state.isLoggedIn,
@@ -36,11 +28,11 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.commit('logout');
-      this.$router.push('/');
+      this.$store.commit('logout')
+      this.$router.push('/')
     },
   },
-};
+}
 </script>
 
 <style>
